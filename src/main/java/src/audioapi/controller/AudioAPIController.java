@@ -22,7 +22,7 @@ import java.util.List;
 *
 * */
 @RestController
-@RequestMapping("/audioapi") // Основная аннотация с параметром 
+@RequestMapping("/audioapi") // Основная аннотация с параметром
 public class AudioAPIController {
 
     @Autowired
