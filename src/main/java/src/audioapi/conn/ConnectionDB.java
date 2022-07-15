@@ -9,15 +9,19 @@ public class ConnectionDB {
     private String password = "root";
     public Connection connection = null;
     protected PreparedStatement preparedStatement = null;
-    protected ResultSet resultSet = null;
+    protected int resultSet;
     public ConnectionDB() {
 
         try {
+
             connection = DriverManager.getConnection(url, user, password);
 
-        } catch (
-                SQLException sqlException) {
+        } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
+    }
+
+    public int getResultSet() {
+        return this.resultSet;
     }
 }

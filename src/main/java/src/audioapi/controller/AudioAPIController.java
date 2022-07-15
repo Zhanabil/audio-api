@@ -16,8 +16,13 @@ import javax.validation.Valid;
 import java.sql.SQLException;
 import java.util.List;
 
+
+/*
+* Контроллер, вызывающий соответствующие функции через ссылку на переменную интерфейса AudioAPIService
+*
+* */
 @RestController
-@RequestMapping("/audioapi")
+@RequestMapping("/audioapi") // Основная аннотация с параметром 
 public class AudioAPIController {
 
     @Autowired
@@ -29,7 +34,7 @@ public class AudioAPIController {
                                                  @Valid @RequestBody @RequestParam(value = "audio_file") MultipartFile audioFile) {
         audioAPIService.addAudioToList(audioId, audioFile);
         try {
-            dataFunctionInteraction.insertDataToSQL();
+            dataFunctionInteraction.insertDataToSQL(audioId, audioFile.getOriginalFilename());
         } catch (SQLException e) {
             e.printStackTrace();
         }

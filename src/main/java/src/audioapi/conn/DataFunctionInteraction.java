@@ -2,43 +2,35 @@ package src.audioapi.conn;
 
 import src.audioapi.model.DAO.AudioDAO;
 
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataFunctionInteraction {
+import static java.lang.Integer.parseInt;
 
+public class DataFunctionInteraction {
     public static ConnectionDB conn;
-    protected String url = "jdbc:mysql://127.0.0.1:3306";
+    protected String url = "jdbc:mysql://127.0.0.1:3306/audio_db";
     protected String user = "root";
     protected String password = "root";
-    public List<AudioDAO> insertDataToSQL() throws SQLException {
+    public void insertDataToSQL(String audioIdToData, String audioFileNameToData) throws SQLException {
 
-        String sql = "SELECT audio_file_name FROM audio_files";
-        List<AudioDAO> audioDataList = new ArrayList<>();
-        conn = new ConnectionDB();
+        int resultSet;
 
-        String audio_id = "";
-        String audio_file_name = "";
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
 
-        if(conn.connection == null) {
-            conn.connection = DriverManager.getConnection(url, user, password);
+            String sql = "INSERT INTO audio_files (audio_id, audio_file_name) VALUES (?, ?)";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, audioIdToData);
+            preparedStatement.setString(2, audioFileNameToData);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException exc) {
+
+            exc.printStackTrace();
         }
-
-        conn.preparedStatement = conn.connection.prepareStatement(sql);
-        conn.resultSet = conn.preparedStatement.executeQuery();
-
-        while(conn.resultSet.next()) {
-            audio_id = conn.resultSet.getString("audio_id");
-            audio_file_name = conn.resultSet.getString("audio_file_name");
-
-            AudioDAO audioDAO = new AudioDAO(audio_id, audio_file_name);
-
-            audioDataList.add(audioDAO);
-        }
-
-        return audioDataList;
-
     }
 }
